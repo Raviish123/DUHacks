@@ -21,7 +21,7 @@ class SignUpActivity : AppCompatActivity() {
 
         if (LoginManager.loggedIn) finish()
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)

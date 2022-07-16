@@ -18,6 +18,7 @@
 
     </com.mapbox.maps.MapView>
 
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
@@ -33,16 +34,17 @@
             android:id="@+id/chooseDestLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#99121212"
+            android:background="@color/card"
             android:visibility="invisible">
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="@dimen/_200sdp"
-                android:layout_height="@dimen/_27sdp"
+                android:layout_width="@dimen/_225sdp"
+                android:layout_height="@dimen/_37sdp"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:text="Search for a place name or long press a location to set it as the destination for which you would like to be dropped."
                 android:textAlignment="center"
+                android:textColor="@color/peachs"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -52,9 +54,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_38sdp"
+                android:backgroundTint="@color/peachs"
                 android:paddingTop="@dimen/_8sdp"
                 android:paddingBottom="@dimen/_8sdp"
                 android:text="Set Destination"
+                android:textColor="@color/btnText"
                 app:cornerRadius="@dimen/_16sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -65,21 +69,109 @@
             android:id="@+id/requestSentLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#99121212">
+            android:background="@color/card"
+            android:visibility="invisible">
 
             <TextView
+                android:textColor="@color/peachs"
                 android:id="@+id/textView4"
                 android:layout_width="@dimen/_250sdp"
                 android:layout_height="@dimen/_47sdp"
                 android:layout_marginTop="@dimen/_55sdp"
-                android:textSize="@dimen/_13ssp"
                 android:text="Your Ride Request has been placed.\n\n Please be patient, a driver will pick you up shortly."
                 android:textAlignment="center"
+                android:textSize="@dimen/_13ssp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/driverComingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/card"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="@dimen/_250sdp"
+                android:layout_height="@dimen/_27sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:text="Your Driver: xxx"
+                android:textAlignment="center"
+                android:textColor="@color/peachs"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:text="0 min"
+                android:textAlignment="center"
+                android:textColor="@color/peachs"
+                android:textSize="@dimen/_35ssp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="x km"
+                android:textAlignment="center"
+                android:textColor="@color/peachs"
+                android:textSize="@dimen/_17ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/waitingForClientLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/card"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="@dimen/_200sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:text="Driver has arrived. Confirm when you are inside the car."
+                android:textAlignment="center"
+                android:textColor="@color/peachs"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/confirmBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_38sdp"
+                android:backgroundTint="@color/peachs"
+                android:paddingTop="@dimen/_8sdp"
+                android:paddingBottom="@dimen/_8sdp"
+                android:text="Confirm"
+                android:textColor="@color/btnText"
+                app:cornerRadius="@dimen/_16sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.cardview.widget.CardView>
 
 

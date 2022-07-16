@@ -11,13 +11,13 @@
         android:layout_width="@dimen/_155sdp"
         android:layout_height="@dimen/_225sdp"
         android:contentDescription="TODO"
-        android:scaleX="2.5"
-        android:scaleY="2.5"
+        android:scaleX="2"
+        android:scaleY="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.35"
+        app:layout_constraintVertical_bias="0.3"
         app:srcCompat="@drawable/vehikle" />
 
     <Button
@@ -25,7 +25,7 @@
         android:layout_width="@dimen/_135sdp"
         android:layout_height="@dimen/_45sdp"
         android:letterSpacing="0"
-        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginTop="-30dp"
         android:text="Login"
         android:textAllCaps="false"
         android:textSize="@dimen/_16ssp"
@@ -40,7 +40,7 @@
         android:layout_width="@dimen/_135sdp"
         android:layout_height="@dimen/_45sdp"
         android:letterSpacing="0"
-        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginTop="@dimen/_12sdp"
         android:text="Sign Up"
         android:textAllCaps="false"
         android:textSize="@dimen/_16ssp"
@@ -49,4 +49,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frontPageBtn1" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="@dimen/_340sdp"
+        android:layout_height="@dimen/_340sdp"
+        android:layout_marginTop="-25dp"
+        android:alpha="0.6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frontPageBtn2"
+        app:srcCompat="@drawable/carpool" />
 </androidx.constraintlayout.widget.ConstraintLayout>
