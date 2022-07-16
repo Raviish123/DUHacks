@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         if (LoginManager.loggedIn) {
             binding.frontPageBtn1.text = "Proceed"
             binding.frontPageBtn1.setOnClickListener {
-//                startActivity(Intent(this@MainActivity, HomeActivity::class.java))
+                startActivity(Intent(this@MainActivity, HomeActivity::class.java))
             }
             binding.frontPageBtn2.visibility = View.INVISIBLE
         } else {
@@ -41,8 +41,8 @@ class MainActivity : AppCompatActivity() {
             binding.frontPageBtn1.setOnClickListener {
 //                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             }
-            binding.frontPageBtn1.text = "Sign Up"
-            binding.frontPageBtn1.setOnClickListener {
+            binding.frontPageBtn2.text = "Sign Up"
+            binding.frontPageBtn2.setOnClickListener {
                 startActivity(Intent(this@MainActivity, SignUpActivity::class.java))
             }
         }

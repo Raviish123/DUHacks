@@ -14,7 +14,7 @@
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName"
-        android:minHeight="48dp"
+        android:minHeight="@dimen/_37sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,7 @@
         android:ems="10"
         android:hint="Phone Number"
         android:inputType="phone"
-        android:minHeight="48dp"
+        android:minHeight="@dimen/_37sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameField" />
@@ -40,18 +40,18 @@
         android:ems="10"
         android:hint="Email Address"
         android:inputType="textEmailAddress"
-        android:minHeight="48dp"
+        android:minHeight="@dimen/_37sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPhone" />
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/signUpBtn"
         android:layout_width="@dimen/_135sdp"
         android:layout_height="@dimen/_42sdp"
         android:letterSpacing="0"
         android:layout_marginTop="@dimen/_50sdp"
-        android:text="Join"
+        android:text="Sign Up"
         android:textAllCaps="false"
         android:textSize="@dimen/_18ssp"
         android:textStyle="bold"
@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_15sdp"
-        android:minHeight="48dp"
+        android:minHeight="@dimen/_37sdp"
         android:text="Driver"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
