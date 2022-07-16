@@ -39,6 +39,7 @@ class SignUpActivity : AppCompatActivity() {
                     LoginManager.isDriver = binding.switch1.isChecked
                     LoginManager.emailAddress = binding.editTextTextEmailAddress.text.toString()
                     LoginManager.phoneNumber = binding.editTextPhone.text.toString()
+                    LoginManager.password = binding.editTextPassword.text.toString()
                     LoginManager.loggedIn = true
                     startActivity(Intent(this@SignUpActivity, HomeActivity::class.java))
                     finish()

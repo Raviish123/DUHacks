@@ -6,4 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <Button
+        android:id="@+id/rideBtn"
+        android:layout_width="@dimen/_135sdp"
+        android:layout_height="@dimen/_45sdp"
+        android:letterSpacing="0"
+        android:text="Ride"
+        android:textAllCaps="false"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        app:cornerRadius="@dimen/_18sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
