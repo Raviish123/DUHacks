@@ -1,6 +1,7 @@
 package com.example.duhackspool
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -41,6 +42,8 @@ class RideActivity : AppCompatActivity() {
     private lateinit var mapboxMap: MapboxMap
 
     private lateinit var carAnnotation: PointAnnotation
+
+    private var totalDistance = -1F
 
     private lateinit var destination: Point
 
@@ -198,6 +201,7 @@ class RideActivity : AppCompatActivity() {
                 binding.textView6.text = "Your Driver: ${carRequest.driver}"
                 binding.textView8.text = "${carRequest.duration?.div(60)!!.roundToInt()} min"
                 binding.textView9.text = "${carRequest.distance?.div(10)!!.roundToInt() / 100.0} km"
+                totalDistance = carRequest.totalDistance!!
 
                 var isCarInit = false
 
@@ -232,6 +236,42 @@ class RideActivity : AppCompatActivity() {
                     acceptReached = 1
                     binding.confirmBtn.isEnabled = false
                 }
+            }
+            "toDestination" -> {
+                setLayout(4)
+                binding.mapView.location.updateSettings {
+                    enabled = false
+                    pulsingEnabled = false
+                }
+                binding.mapView.location.removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+
+                if (carAnnotation.point.longitude() == carRequest.driverPos[0]!!.toDouble() && carAnnotation.point.latitude() == carRequest.driverPos[1]!!.toDouble() && carAnnotation.iconRotate == carRequest.driverBearing.toDouble()) return
+                pointAnnotationManager.delete(carAnnotation)
+
+                val pointAnnotationOptions: PointAnnotationOptions? = carDrawable?.let { it1 ->
+                    PointAnnotationOptions()
+                        .withPoint(Point.fromLngLat(carRequest.driverPos[0]!!.toDouble(),
+                            carRequest.driverPos[1]!!.toDouble()
+                        ))
+                        .withIconImage(it1.getBitmap())
+                        .withIconRotate(carRequest.driverBearing.toDouble())
+                        .withIconSize(0.5)
+                }
+
+
+                if (pointAnnotationOptions != null) {
+                    carAnnotation = pointAnnotationManager.create(pointAnnotationOptions)
+                }
+            }
+            "arrived" -> {
+                mainHandler.removeCallbacks(refreshRequestsTask)
+                if (totalDistance == -1F) totalDistance = carRequest.totalDistance!!
+                val paymentAmount = (((20.0 + (totalDistance / 100.0)) * 100.0).roundToInt()) / 100.0
+                Log.d("ADSFFDF", paymentAmount.toString())
+//                var intent = Intent(this@ClientMapsActivity, PaymentActivity::class.java)
+//                intent.putExtra("paymentAmount", paymentAmount)
+//                startActivity(intent)
+//                finish()
             }
         }
     }
