@@ -265,7 +265,10 @@ class RideActivity : AppCompatActivity() {
                     pulsingEnabled = false
                 }
                 binding.mapView.location.removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
-                if (totalDistance == -1F) totalDistance = carRequest.totalDistance!!
+
+                Log.d("dd", carRequest.totalDistance!!.toString())
+
+                totalDistance = carRequest.totalDistance!!
 
                 if (carAnnotation.point.longitude() == carRequest.driverPos[0]!!.toDouble() && carAnnotation.point.latitude() == carRequest.driverPos[1]!!.toDouble() && carAnnotation.iconRotate == carRequest.driverBearing.toDouble()) return
                 pointAnnotationManager.delete(carAnnotation)
