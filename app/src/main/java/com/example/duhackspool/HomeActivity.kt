@@ -25,5 +25,9 @@ class HomeActivity : AppCompatActivity() {
         binding.rideBtn.setOnClickListener {
             startActivity(Intent(this@HomeActivity, RideActivity::class.java))
         }
+
+        binding.driveBtn.setOnClickListener {
+            startActivity(Intent(this@HomeActivity, DriveActivity::class.java))
+        }
     }
 }
