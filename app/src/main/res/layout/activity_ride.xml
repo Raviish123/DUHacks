@@ -40,8 +40,8 @@
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="@dimen/_225sdp"
-                android:layout_height="@dimen/_37sdp"
-                android:layout_marginTop="@dimen/_25sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:text="Search for a place name or long press a location to set it as the destination for which you would like to be dropped."
                 android:textAlignment="center"
                 android:textColor="@color/peachs"
@@ -53,16 +53,29 @@
                 android:id="@+id/setDest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_28sdp"
+                android:layout_marginTop="@dimen/_25sdp"
                 android:backgroundTint="@color/peachs"
-                android:paddingTop="@dimen/_8sdp"
-                android:paddingBottom="@dimen/_8sdp"
+                android:paddingTop="@dimen/_7sdp"
+                android:paddingBottom="@dimen/_7sdp"
                 android:text="Set Destination"
                 android:textColor="@color/btnText"
                 app:cornerRadius="@dimen/_16sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Estimated Pool Price: "
+                android:textSize="@dimen/_10ssp"
+                android:textAlignment="center"
+                android:textColor="@color/peachs"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/setDest" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

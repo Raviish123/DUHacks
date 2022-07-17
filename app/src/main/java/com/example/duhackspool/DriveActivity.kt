@@ -159,6 +159,7 @@ class DriveActivity : AppCompatActivity() {
                 Log.d("ADSFFDF", paymentAmount.toString())
                 var intent = Intent(this@DriveActivity, PaymentActivity::class.java)
                 intent.putExtra("paymentAmount", paymentAmount)
+                intent.putExtra("isDriver", true)
                 startActivity(intent)
                 finish()
 
@@ -595,7 +596,7 @@ class DriveActivity : AppCompatActivity() {
     private fun updatePosToDest() {
         val pos = navigationLocationProvider.lastLocation ?: return
         // Use account information for driver name
-        val httpAsync = "http://192.168.0.122:8000/claim_request/${requestIndex}/${cRouteProgress.distanceRemaining}/${cRouteProgress.durationRemaining}/${pos.longitude}/${pos.latitude}/Raviish/${cState}/${pos.bearing}"
+        val httpAsync = "http://192.168.0.122:8000/claim_request/${requestIndex}/${cRouteProgress.distanceRemaining}/${cRouteProgress.durationRemaining}/${pos.longitude}/${pos.latitude}/Raviish/${cState}/${pos.bearing}/${totalDistance}"
             .httpGet()
             .responseJson { _, _, result ->
                 when (result) {
@@ -693,5 +694,10 @@ class DriveActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         locationPermissionHelper.onRequestPermissionsResult(requestCode,
             permissions as Array<String>, grantResults)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

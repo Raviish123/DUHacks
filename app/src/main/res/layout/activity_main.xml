@@ -17,13 +17,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintVertical_bias="0.225"
         app:srcCompat="@drawable/vehikle" />
 
     <Button
         android:id="@+id/frontPageBtn1"
         android:layout_width="@dimen/_135sdp"
-        android:layout_height="@dimen/_45sdp"
+        android:layout_height="@dimen/_48sdp"
         android:letterSpacing="0"
         android:layout_marginTop="-30dp"
         android:text="Login"
@@ -38,7 +38,7 @@
     <Button
         android:id="@+id/frontPageBtn2"
         android:layout_width="@dimen/_135sdp"
-        android:layout_height="@dimen/_45sdp"
+        android:layout_height="@dimen/_48sdp"
         android:letterSpacing="0"
         android:layout_marginTop="@dimen/_12sdp"
         android:text="Sign Up"
@@ -52,12 +52,34 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="@dimen/_340sdp"
-        android:layout_height="@dimen/_340sdp"
-        android:layout_marginTop="-25dp"
-        android:alpha="0.6"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_120sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:alpha="1.0"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frontPageBtn2"
         app:srcCompat="@drawable/carpool" />
+
+    <Button
+        android:id="@+id/nightMode"
+        android:layout_width="@dimen/_33sdp"
+        android:layout_height="@dimen/_43sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="N"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/dayMode"
+        android:layout_width="@dimen/_33sdp"
+        android:layout_height="@dimen/_43sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="L"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

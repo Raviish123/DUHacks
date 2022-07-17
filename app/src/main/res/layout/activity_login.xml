@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".LoginActivity">
+
 
     <EditText
         android:id="@+id/nameField"
@@ -20,32 +21,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_32sdp"
-        android:ems="10"
-        android:hint="Phone Number"
-        android:inputType="phone"
-        android:minHeight="@dimen/_37sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameField" />
-
-    <EditText
-        android:id="@+id/editTextTextEmailAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_32sdp"
-        android:ems="10"
-        android:hint="Email Address"
-        android:inputType="textEmailAddress"
-        android:minHeight="@dimen/_37sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPhone" />
-
-    <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,34 +31,24 @@
         android:minHeight="@dimen/_37sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/nameField" />
 
     <Button
-        android:id="@+id/signUpBtn"
+        android:id="@+id/loginBtn"
         android:layout_width="@dimen/_135sdp"
         android:layout_height="@dimen/_42sdp"
         android:letterSpacing="0"
         android:layout_marginTop="@dimen/_50sdp"
-        android:text="Sign Up"
+        android:text="Login"
         android:textAllCaps="false"
         android:textSize="@dimen/_18ssp"
         android:textStyle="bold"
         app:cornerRadius="@dimen/_15sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch1" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:minHeight="@dimen/_37sdp"
-        android:text="Driver"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
 
     <Button
         android:id="@+id/nightMode"

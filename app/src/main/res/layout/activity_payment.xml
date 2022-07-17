@@ -6,4 +6,87 @@
     android:layout_height="match_parent"
     tools:context=".PaymentActivity">
 
+
+    <Button
+        android:id="@+id/nightMode"
+        android:layout_width="@dimen/_33sdp"
+        android:layout_height="@dimen/_43sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:text="N"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/dayMode"
+        android:layout_width="@dimen/_33sdp"
+        android:layout_height="@dimen/_43sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:text="L"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="You have arrived at your destination."
+        android:textColor="@color/txt"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="You are required to pay a total of"
+        android:textColor="@color/txt"
+        android:textSize="@dimen/_16ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <TextView
+        android:id="@+id/paymentText"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center"
+        android:text="₹0.00"
+        android:textColor="@color/txt"
+        android:textSize="@dimen/_25ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.475" />
+
+    <Button
+        android:id="@+id/continueBtn"
+        android:layout_width="@dimen/_135sdp"
+        android:layout_height="@dimen/_48sdp"
+        android:letterSpacing="0"
+        android:text="Continue"
+        android:textAllCaps="false"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        app:cornerRadius="@dimen/_18sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/paymentText"
+        app:layout_constraintVertical_bias="0.15" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

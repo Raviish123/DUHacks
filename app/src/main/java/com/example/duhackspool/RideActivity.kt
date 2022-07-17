@@ -11,7 +11,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
 import com.example.duhackspool.databinding.ActivityRideBinding
+import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.fuel.json.responseJson
 import com.github.kittinunf.result.Result
 import com.google.gson.Gson
 import com.mapbox.geojson.Point
@@ -86,6 +88,21 @@ class RideActivity : AppCompatActivity() {
                 .withPoint(point)
                 .withIconImage(it1.getBitmap())
         }
+
+        "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/${clientInitPos.longitude()},${clientInitPos.latitude()};${destination.longitude()},${destination.latitude()}?access_token=pk.eyJ1IjoidHJ1Y2ttYXBwZXIiLCJhIjoiY2w0NTNqbXByMDR1OTNrcDUyNmoxNGR2bCJ9.WMfnWG6aDMGRJ5MbEbSJIQ"
+            .httpGet()
+            .responseJson { _, _, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        Log.d("Errr", result.getException().toString())
+                    }
+                    is Result.Success -> {
+                        val dist = result.get().obj().getJSONArray("routes").getJSONObject(0).getDouble("distance")
+                        binding.textView20.text = "Estimated Pool Price: ${(((20.0 + (dist / 100.0)) * 100.0).roundToInt()) / 100.0}"
+                    }
+                }
+            }
+            .join()
         pointAnnotationManager.deleteAll()
         if (pointAnnotationOptions != null) {
             pointAnnotationManager.create(pointAnnotationOptions)
@@ -146,6 +163,8 @@ class RideActivity : AppCompatActivity() {
         binding.mapView.compass.enabled = false
         binding.mapView.gestures.pitchEnabled = false
         binding.setDest.isEnabled = false
+
+        binding.textView20.text = ""
 
         setLayout(0)
 
@@ -246,7 +265,7 @@ class RideActivity : AppCompatActivity() {
                     pulsingEnabled = false
                 }
                 binding.mapView.location.removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
-                if (totalDistance != -1F) totalDistance = carRequest.totalDistance!!
+                if (totalDistance == -1F) totalDistance = carRequest.totalDistance!!
 
                 if (carAnnotation.point.longitude() == carRequest.driverPos[0]!!.toDouble() && carAnnotation.point.latitude() == carRequest.driverPos[1]!!.toDouble() && carAnnotation.iconRotate == carRequest.driverBearing.toDouble()) return
                 pointAnnotationManager.delete(carAnnotation)
@@ -273,6 +292,7 @@ class RideActivity : AppCompatActivity() {
                 Log.d("ADSFFDF", paymentAmount.toString())
                 var intent = Intent(this@RideActivity, PaymentActivity::class.java)
                 intent.putExtra("paymentAmount", paymentAmount)
+                intent.putExtra("isDriver", false)
                 startActivity(intent)
                 finish()
             }
@@ -282,8 +302,7 @@ class RideActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        "http://192.168.0.122:8000/deleteRequest/${requestIndex}"
-            .httpGet()
+
     }
 
     override fun onStop() {
@@ -292,6 +311,13 @@ class RideActivity : AppCompatActivity() {
         mainHandler.removeCallbacks(refreshRequestsTask)
     }
 
+
+    override fun onPause() {
+        super.onPause()
+
+        "http://192.168.0.122:8000/deleteRequest/${requestIndex}"
+            .httpGet()
+    }
 
 
     private fun setLayout(indx: Int) {
@@ -315,5 +341,10 @@ class RideActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         locationPermissionHelper.onRequestPermissionsResult(requestCode,
             permissions as Array<String>, grantResults)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

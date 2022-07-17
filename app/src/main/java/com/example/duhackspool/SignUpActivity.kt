@@ -21,14 +21,27 @@ class SignUpActivity : AppCompatActivity() {
 
         if (LoginManager.loggedIn) finish()
 
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-
         binding = ActivitySignUpBinding.inflate(layoutInflater)
+
+        binding.nightMode.setOnClickListener {
+            day()
+        }
+
+        binding.dayMode.setOnClickListener {
+            night()
+        }
+
+        binding.dayMode.visibility = if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) View.VISIBLE else View.INVISIBLE
+        binding.nightMode.visibility = if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) View.VISIBLE else View.INVISIBLE
+
         setContentView(binding.root)
 
         supportActionBar?.setDisplayShowCustomEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
+        if (savedInstanceState != null) return
 
         binding.signUpBtn.setOnClickListener {
             if (binding.nameField.text.toString() != "" && binding.editTextTextEmailAddress.text.toString() != "" && binding.editTextPhone.toString() != "") {
@@ -48,5 +61,24 @@ class SignUpActivity : AppCompatActivity() {
                 Snackbar.make(findViewById(android.R.id.content), "Fill in all fields.", Snackbar.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun night() {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        delegate.applyDayNight()
+        binding.nightMode.visibility = View.VISIBLE
+        binding.dayMode.visibility = View.INVISIBLE
+    }
+
+    private fun day() {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        delegate.applyDayNight()
+        binding.dayMode.visibility = View.VISIBLE
+        binding.nightMode.visibility = View.INVISIBLE
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }
