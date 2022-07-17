@@ -525,7 +525,7 @@ class DriveActivity : AppCompatActivity() {
     private fun updatePosToClient() {
         val pos = navigationLocationProvider.lastLocation ?: return
         // Use account information for driver name
-        val httpAsync = "http://192.168.0.122:8000/claim_request/${requestIndex}/${cRouteProgress.distanceRemaining}/${cRouteProgress.durationRemaining}/${pos.longitude}/${pos.latitude}/Raviish/${cState}/${pos.bearing}/-1"
+        val httpAsync = "http://192.168.0.122:8000/claim_request/${requestIndex}/${cRouteProgress.distanceRemaining}/${cRouteProgress.durationRemaining}/${pos.longitude}/${pos.latitude}/${LoginManager.name}/${cState}/${pos.bearing}/-1"
             .httpGet()
             .responseJson { _, _, result ->
                 when (result) {
@@ -597,7 +597,7 @@ class DriveActivity : AppCompatActivity() {
     private fun updatePosToDest() {
         val pos = navigationLocationProvider.lastLocation ?: return
         // Use account information for driver name
-        val httpAsync = "http://192.168.0.122:8000/claim_request/${requestIndex}/${cRouteProgress.distanceRemaining}/${cRouteProgress.durationRemaining}/${pos.longitude}/${pos.latitude}/Raviish/${cState}/${pos.bearing}/${totalDistance}"
+        val httpAsync = "http://192.168.0.122:8000/claim_request/${requestIndex}/${cRouteProgress.distanceRemaining}/${cRouteProgress.durationRemaining}/${pos.longitude}/${pos.latitude}/${LoginManager.name}/${cState}/${pos.bearing}/${totalDistance}"
             .httpGet()
             .responseJson { _, _, result ->
                 when (result) {

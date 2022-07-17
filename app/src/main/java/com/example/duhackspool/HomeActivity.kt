@@ -37,6 +37,8 @@ class HomeActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        binding.nameTxt.text = LoginManager.name
+
 
         binding.rideBtn.setOnClickListener {
             startActivity(Intent(this@HomeActivity, RideActivity::class.java))
