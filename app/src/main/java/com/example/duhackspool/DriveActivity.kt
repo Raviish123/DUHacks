@@ -1,6 +1,7 @@
 package com.example.duhackspool
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.location.Location
@@ -33,23 +34,41 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.locationcomponent.location
+import com.mapbox.navigation.base.TimeFormat
 import com.mapbox.navigation.base.extensions.applyDefaultNavigationOptions
 import com.mapbox.navigation.base.options.NavigationOptions
 import com.mapbox.navigation.base.route.NavigationRoute
 import com.mapbox.navigation.base.route.NavigationRouterCallback
 import com.mapbox.navigation.base.route.RouterFailure
 import com.mapbox.navigation.base.route.RouterOrigin
+import com.mapbox.navigation.base.trip.model.RouteLegProgress
+import com.mapbox.navigation.base.trip.model.RouteProgress
 import com.mapbox.navigation.core.MapboxNavigation
 import com.mapbox.navigation.core.MapboxNavigationProvider
+import com.mapbox.navigation.core.arrival.ArrivalObserver
+import com.mapbox.navigation.core.directions.session.RoutesObserver
+import com.mapbox.navigation.core.formatter.MapboxDistanceFormatter
 import com.mapbox.navigation.core.trip.session.LocationMatcherResult
 import com.mapbox.navigation.core.trip.session.LocationObserver
+import com.mapbox.navigation.core.trip.session.RouteProgressObserver
+import com.mapbox.navigation.ui.maneuver.api.MapboxManeuverApi
 import com.mapbox.navigation.ui.maps.camera.NavigationCamera
 import com.mapbox.navigation.ui.maps.camera.data.MapboxNavigationViewportDataSource
 import com.mapbox.navigation.ui.maps.camera.lifecycle.NavigationBasicGesturesHandler
 import com.mapbox.navigation.ui.maps.camera.transition.NavigationCameraTransitionOptions
 import com.mapbox.navigation.ui.maps.location.NavigationLocationProvider
+import com.mapbox.navigation.ui.maps.route.arrow.api.MapboxRouteArrowApi
+import com.mapbox.navigation.ui.maps.route.arrow.api.MapboxRouteArrowView
+import com.mapbox.navigation.ui.maps.route.arrow.model.RouteArrowOptions
+import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineApi
+import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineView
+import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineOptions
+import com.mapbox.navigation.ui.maps.route.line.model.NavigationRouteLine
+import com.mapbox.navigation.ui.tripprogress.api.MapboxTripProgressApi
+import com.mapbox.navigation.ui.tripprogress.model.*
 import com.mapbox.navigation.ui.utils.internal.extensions.getBitmap
 import java.lang.ref.WeakReference
+import kotlin.math.roundToInt
 
 class DriveActivity : AppCompatActivity() {
 
@@ -57,7 +76,11 @@ class DriveActivity : AppCompatActivity() {
 
     private lateinit var mapboxMap: MapboxMap
 
+    private var totalDistance: Float = -1F
+
     private val navigationLocationProvider = NavigationLocationProvider()
+
+    private var requestIndex = -1
 
     private lateinit var mapboxNavigation: MapboxNavigation
 
@@ -102,6 +125,108 @@ class DriveActivity : AppCompatActivity() {
             380.0 * pxDensity,
             110.0 * pxDensity,
             40.0 * pxDensity
+        )
+    }
+
+    private lateinit var cRouteProgress: RouteProgress
+
+    private var cState: String = "toClient"
+
+    private lateinit var routeLineApi: MapboxRouteLineApi
+
+    private lateinit var routeLineView: MapboxRouteLineView
+
+    private val routeArrowApi: MapboxRouteArrowApi = MapboxRouteArrowApi()
+
+    private lateinit var routeArrowView: MapboxRouteArrowView
+
+    private lateinit var maneuverApi: MapboxManeuverApi
+
+    private lateinit var tripProgressApi: MapboxTripProgressApi
+
+    private val arrivalObserver = object : ArrivalObserver {
+        override fun onFinalDestinationArrival(routeProgress: RouteProgress) {
+            if (cState == "toClient") {
+                cState = "waitingForClient"
+                binding.maneuverView.visibility = View.INVISIBLE
+                setCard(2)
+                mapboxNavigation.stopTripSession()
+            }
+            if (cState == "toDestination") {
+                cState = "arrived"
+                mapboxNavigation.stopTripSession()
+                val paymentAmount = (((20.0 + (totalDistance / 100.0)) * 100.0).roundToInt()) / 100.0
+                Log.d("ADSFFDF", paymentAmount.toString())
+                var intent = Intent(this@DriveActivity, PaymentActivity::class.java)
+                intent.putExtra("paymentAmount", paymentAmount)
+                startActivity(intent)
+                finish()
+
+            }
+            mapboxNavigation.stopTripSession()
+        }
+
+        override fun onNextRouteLegStart(routeLegProgress: RouteLegProgress) {  }
+
+        override fun onWaypointArrival(routeProgress: RouteProgress) {  }
+
+    }
+
+    private val routesObserver = RoutesObserver { result ->
+        if (result.navigationRoutes.isNotEmpty()) {
+            val routeLines = result.navigationRoutes.map { NavigationRouteLine(it, null) }
+
+            routeLineApi.setNavigationRouteLines(routeLines) { value ->
+                mapboxMap.getStyle()?.let {
+                    routeLineView.renderRouteDrawData(it, value)
+                }
+            }
+
+            viewportDataSource.onRouteChanged(result.navigationRoutes.first())
+            viewportDataSource.evaluate()
+
+        } else {
+
+            val style = mapboxMap.getStyle()
+
+            if(style != null) {
+                routeLineApi.clearRouteLine { value ->
+                    routeLineView.renderClearRouteLineValue(style, value)
+                }
+
+                routeArrowView.render(style, routeArrowApi.clearArrows())
+            }
+
+            viewportDataSource.clearRouteData()
+            viewportDataSource.evaluate()
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private val routeProgressObserver = RouteProgressObserver { routeProgress ->
+
+        cRouteProgress = routeProgress
+
+        viewportDataSource.onRouteProgressChanged(routeProgress)
+        viewportDataSource.evaluate()
+
+        val style = mapboxMap.getStyle()
+        if (style != null) {
+            routeArrowView.renderManeuverUpdate(style, routeArrowApi.addUpcomingManeuverArrow(routeProgress))
+        }
+
+        val maneuvers = maneuverApi.getManeuvers(routeProgress)
+        maneuvers.fold(
+            { error ->
+                Log.e("Error", error.errorMessage.toString())
+            },
+            {
+                binding.maneuverView.visibility = View.VISIBLE
+                binding.maneuverView.renderManeuvers(maneuvers)
+            }
+        )
+        binding.tripProgressView.render(
+            tripProgressApi.getTripProgress(routeProgress)
         )
     }
 
@@ -152,6 +277,20 @@ class DriveActivity : AppCompatActivity() {
         }
     }
 
+    private val updatePosToClientTask = object : Runnable {
+        override fun run() {
+            updatePosToClient()
+            mainHandler.postDelayed(this, 3000)
+        }
+    }
+
+    private val updatePosToDestTask = object : Runnable {
+        override fun run() {
+            updatePosToDest()
+            mainHandler.postDelayed(this, 3000)
+        }
+    }
+
     private lateinit var destAnnotation: PointAnnotation
 
     private var selectedPoint: PointAnnotation? = null
@@ -163,7 +302,7 @@ class DriveActivity : AppCompatActivity() {
     private val refreshRequestsTask = object : Runnable {
         override fun run() {
             refreshRequests()
-            mainHandler.postDelayed(this, 5000)
+            mainHandler.postDelayed(this, 3000)
         }
     }
 
@@ -204,6 +343,28 @@ class DriveActivity : AppCompatActivity() {
             )
         }
 
+        maneuverApi = MapboxManeuverApi(
+            MapboxDistanceFormatter(mapboxNavigation.navigationOptions.distanceFormatterOptions)
+        )
+
+        tripProgressApi = MapboxTripProgressApi(
+            TripProgressUpdateFormatter.Builder(this)
+                .distanceRemainingFormatter(DistanceRemainingFormatter(mapboxNavigation.navigationOptions.distanceFormatterOptions))
+                .timeRemainingFormatter(TimeRemainingFormatter(this))
+                .percentRouteTraveledFormatter(PercentDistanceTraveledFormatter())
+                .estimatedTimeToArrivalFormatter(EstimatedTimeToArrivalFormatter(this, TimeFormat.NONE_SPECIFIED))
+                .build()
+        )
+
+        val routeLineOptions = MapboxRouteLineOptions.Builder(this)
+            .withRouteLineBelowLayerId("road-label")
+            .build()
+
+        routeLineApi = MapboxRouteLineApi(routeLineOptions)
+        routeLineView = MapboxRouteLineView(routeLineOptions)
+
+        routeArrowView = MapboxRouteArrowView(RouteArrowOptions.Builder(this).build())
+
         viewportDataSource = MapboxNavigationViewportDataSource(mapboxMap)
         navigationCamera = NavigationCamera(mapboxMap, binding.driverMapView.camera, viewportDataSource)
 
@@ -229,12 +390,12 @@ class DriveActivity : AppCompatActivity() {
             if (selectedPoint != null) {
                 pointAnnotationManager.delete(destAnnotation)
                 if (selectedPoint == annotation) {
-                    binding.pointView.visibility = View.INVISIBLE
                     selectedPoint = null
+                    binding.claimButton.isEnabled = false
                     return@OnPointAnnotationClickListener true
                 }
             }
-            binding.pointView.visibility = View.VISIBLE
+            setCard(0)
             binding.claimButton.isEnabled = false
             selectedPoint = annotation
 
@@ -280,7 +441,7 @@ class DriveActivity : AppCompatActivity() {
                             navigationCamera.requestNavigationCameraToOverview()
                             binding.claimButton.isEnabled = true
                             binding.claimButton.setOnClickListener {
-                                binding.pointView.visibility = View.INVISIBLE
+                                binding.claimButton.isEnabled = false
                                 mainHandler.removeCallbacks(refreshRequestsTask)
                                 pointAnnotationManager.deleteAll()
                                 startNavToClient(tmpCReq)
@@ -312,9 +473,158 @@ class DriveActivity : AppCompatActivity() {
     }
 
     private fun startNavToClient(data: Pair<Int, CarRequest>) {
+        val indx = data.first
         val cRequest = data.second
 
-        Log.d("dfgk", Gson().toJson(cRequest).toString())
+        requestIndex = indx
+
+        val originPos = navigationLocationProvider.lastLocation ?: return
+        val originPoint = Point.fromLngLat(originPos.longitude, originPos.latitude)
+
+        val clientPoint = Point.fromLngLat(cRequest.clientPos[0]!!.toDouble(), cRequest.clientPos[1]!!.toDouble())
+
+        mapboxNavigation.requestRoutes(
+            RouteOptions.builder()
+                .applyDefaultNavigationOptions()
+                .coordinatesList(listOf(originPoint, clientPoint))
+                .bearingsList(
+                    listOf(
+                        Bearing.builder()
+                            .angle(originPos.bearing.toDouble())
+                            .degrees(45.0)
+                            .build(),
+                        null
+                    )
+                )
+                .build(),
+            object : NavigationRouterCallback {
+
+                override fun onRoutesReady(routes: List<NavigationRoute>, routerOrigin: RouterOrigin) {
+
+                    mapboxNavigation.setNavigationRoutes(routes)
+
+                    navigationCamera.requestNavigationCameraToFollowing()
+
+                    mainHandler.postDelayed(updatePosToClientTask, 3000)
+
+                    setCard(1)
+
+
+                }
+
+                override fun onCanceled(routeOptions: RouteOptions, routerOrigin: RouterOrigin) {   }
+
+                override fun onFailure(reasons: List<RouterFailure>, routeOptions: RouteOptions) {  }
+            }
+        )
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun updatePosToClient() {
+        val pos = navigationLocationProvider.lastLocation ?: return
+        // Use account information for driver name
+        val httpAsync = "http://192.168.0.122:8000/claim_request/${requestIndex}/${cRouteProgress.distanceRemaining}/${cRouteProgress.durationRemaining}/${pos.longitude}/${pos.latitude}/Raviish/${cState}/${pos.bearing}/-1"
+            .httpGet()
+            .responseJson { _, _, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        Log.e("Error", result.getException().toString())
+                    }
+                    is Result.Success -> {
+                        val carRequest: CarRequest = Gson().fromJson(result.get().obj().toString(), CarRequest::class.java)
+                        if (carRequest.state == "toDestination") {
+                            mainHandler.removeCallbacks(updatePosToClientTask)
+                            mapboxNavigation.startTripSession()
+                            startNavToDest(carRequest)
+                        }
+                    }
+                }
+            }
+        httpAsync.join()
+    }
+
+    private fun startNavToDest(cReq: CarRequest) {
+        val originPos = navigationLocationProvider.lastLocation ?: return
+        val originPoint = Point.fromLngLat(originPos.longitude, originPos.latitude)
+
+        val destPoint = Point.fromLngLat(cReq.dest[0]!!.toDouble(), cReq.dest[1]!!.toDouble())
+
+        mainHandler.removeCallbacks(updatePosToClientTask)
+
+        mapboxNavigation.requestRoutes(
+            RouteOptions.builder()
+                .applyDefaultNavigationOptions()
+                .coordinatesList(listOf(originPoint, destPoint))
+                .bearingsList(
+                    listOf(
+                        Bearing.builder()
+                            .angle(originPos.bearing.toDouble())
+                            .degrees(45.0)
+                            .build(),
+                        null
+                    )
+                )
+                .build(),
+            object : NavigationRouterCallback {
+
+                override fun onRoutesReady(routes: List<NavigationRoute>, routerOrigin: RouterOrigin) {
+
+                    cState = "toDestination"
+
+                    mapboxNavigation.setNavigationRoutes(routes)
+
+                    navigationCamera.requestNavigationCameraToFollowing()
+
+                    totalDistance = routes[0].directionsRoute.distance().toFloat()
+
+                    setCard(1)
+
+                    mainHandler.removeCallbacks(updatePosToClientTask)
+                    mainHandler.postDelayed(updatePosToDestTask, 3000)
+
+
+                }
+
+                override fun onCanceled(routeOptions: RouteOptions, routerOrigin: RouterOrigin) {   }
+
+                override fun onFailure(reasons: List<RouterFailure>, routeOptions: RouteOptions) {  }
+            }
+        )
+    }
+
+    private fun updatePosToDest() {
+        val pos = navigationLocationProvider.lastLocation ?: return
+        // Use account information for driver name
+        val httpAsync = "http://192.168.0.122:8000/claim_request/${requestIndex}/${cRouteProgress.distanceRemaining}/${cRouteProgress.durationRemaining}/${pos.longitude}/${pos.latitude}/Raviish/${cState}/${pos.bearing}"
+            .httpGet()
+            .responseJson { _, _, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        Log.e("Error", result.getException().toString())
+                    }
+                    is Result.Success -> {
+                        val carRequest: CarRequest = Gson().fromJson(result.get().obj().toString(), CarRequest::class.java)
+                        if (carRequest.state == "arrived") {
+                            mainHandler.removeCallbacks(updatePosToDestTask)
+                        } else if (carRequest.state == "waitingForClient") {
+                            cState = "toDestination"
+                        }
+                    }
+                }
+            }
+        httpAsync.join()
+    }
+
+
+    private fun setCard(indx: Int) {
+        for (card in listOf(binding.pointView, binding.tripProgressCard, binding.waitingView)) {
+            card.visibility = View.GONE
+        }
+        when (indx) {
+            0 -> binding.pointView.visibility = View.VISIBLE
+            1 -> binding.tripProgressCard.visibility = View.VISIBLE
+            2 -> binding.waitingView.visibility = View.VISIBLE
+        }
     }
 
 
@@ -360,11 +670,17 @@ class DriveActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         mapboxNavigation.registerLocationObserver(locationObserver)
+        mapboxNavigation.registerRoutesObserver(routesObserver)
+        mapboxNavigation.registerRouteProgressObserver(routeProgressObserver)
+        mapboxNavigation.registerArrivalObserver(arrivalObserver)
     }
 
     override fun onStop() {
         super.onStop()
         mapboxNavigation.unregisterLocationObserver(locationObserver)
+        mapboxNavigation.unregisterRoutesObserver(routesObserver)
+        mapboxNavigation.unregisterRouteProgressObserver(routeProgressObserver)
+        mapboxNavigation.unregisterArrivalObserver(arrivalObserver)
 
     }
 

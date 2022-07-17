@@ -201,7 +201,7 @@ class RideActivity : AppCompatActivity() {
                 binding.textView6.text = "Your Driver: ${carRequest.driver}"
                 binding.textView8.text = "${carRequest.duration?.div(60)!!.roundToInt()} min"
                 binding.textView9.text = "${carRequest.distance?.div(10)!!.roundToInt() / 100.0} km"
-                totalDistance = carRequest.totalDistance!!
+
 
                 var isCarInit = false
 
@@ -239,11 +239,14 @@ class RideActivity : AppCompatActivity() {
             }
             "toDestination" -> {
                 setLayout(4)
+                binding.textView18.text = "${carRequest.duration?.div(60)!!.roundToInt()} min"
+                binding.textView19.text = "${carRequest.distance?.div(10)!!.roundToInt() / 100.0} km"
                 binding.mapView.location.updateSettings {
                     enabled = false
                     pulsingEnabled = false
                 }
                 binding.mapView.location.removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+                if (totalDistance != -1F) totalDistance = carRequest.totalDistance!!
 
                 if (carAnnotation.point.longitude() == carRequest.driverPos[0]!!.toDouble() && carAnnotation.point.latitude() == carRequest.driverPos[1]!!.toDouble() && carAnnotation.iconRotate == carRequest.driverBearing.toDouble()) return
                 pointAnnotationManager.delete(carAnnotation)
@@ -268,10 +271,10 @@ class RideActivity : AppCompatActivity() {
                 if (totalDistance == -1F) totalDistance = carRequest.totalDistance!!
                 val paymentAmount = (((20.0 + (totalDistance / 100.0)) * 100.0).roundToInt()) / 100.0
                 Log.d("ADSFFDF", paymentAmount.toString())
-//                var intent = Intent(this@ClientMapsActivity, PaymentActivity::class.java)
-//                intent.putExtra("paymentAmount", paymentAmount)
-//                startActivity(intent)
-//                finish()
+                var intent = Intent(this@RideActivity, PaymentActivity::class.java)
+                intent.putExtra("paymentAmount", paymentAmount)
+                startActivity(intent)
+                finish()
             }
         }
     }
@@ -292,7 +295,7 @@ class RideActivity : AppCompatActivity() {
 
 
     private fun setLayout(indx: Int) {
-        for (layout in listOf(binding.chooseDestLayout, binding.requestSentLayout, binding.driverComingLayout, binding.waitingForClientLayout)) {
+        for (layout in listOf(binding.chooseDestLayout, binding.requestSentLayout, binding.driverComingLayout, binding.waitingForClientLayout, binding.toDestLayout)) {
             layout.visibility = View.GONE
         }
         when (indx) {
@@ -300,6 +303,7 @@ class RideActivity : AppCompatActivity() {
             1 -> binding.requestSentLayout.visibility = View.VISIBLE
             2 -> binding.driverComingLayout.visibility = View.VISIBLE
             3 -> binding.waitingForClientLayout.visibility = View.VISIBLE
+            4 -> binding.toDestLayout.visibility = View.VISIBLE
         }
     }
 
