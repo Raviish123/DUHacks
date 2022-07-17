@@ -16,6 +16,8 @@ class HomeActivity : AppCompatActivity() {
 
         binding = ActivityHomeBinding.inflate(layoutInflater)
 
+        if (!LoginManager.loggedIn) finish()
+
         binding.nightMode.setOnClickListener {
             day()
         }
@@ -36,15 +38,21 @@ class HomeActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
-        if (savedInstanceState != null) return
-
         binding.rideBtn.setOnClickListener {
             startActivity(Intent(this@HomeActivity, RideActivity::class.java))
         }
 
-        binding.driveBtn.setOnClickListener {
-            startActivity(Intent(this@HomeActivity, DriveActivity::class.java))
+        if (LoginManager.isDriver) {
+            binding.driveBtn.visibility = View.VISIBLE
+            binding.driveBtn.setOnClickListener {
+                startActivity(Intent(this@HomeActivity, DriveActivity::class.java))
+            }
+        } else {
+            binding.driveBtn.visibility = View.GONE
         }
+
+
+
     }
 
     private fun night() {

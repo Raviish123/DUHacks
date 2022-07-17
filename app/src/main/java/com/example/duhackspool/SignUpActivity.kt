@@ -41,7 +41,6 @@ class SignUpActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
-        if (savedInstanceState != null) return
 
         binding.signUpBtn.setOnClickListener {
             if (binding.nameField.text.toString() != "" && binding.editTextTextEmailAddress.text.toString() != "" && binding.editTextPhone.toString() != "") {

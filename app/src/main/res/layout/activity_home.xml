@@ -6,20 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
-    <Button
-        android:id="@+id/rideBtn"
-        android:layout_width="@dimen/_135sdp"
-        android:layout_height="@dimen/_45sdp"
-        android:letterSpacing="0"
-        android:text="Ride"
-        android:textAllCaps="false"
-        android:textSize="@dimen/_16ssp"
-        android:textStyle="bold"
-        app:cornerRadius="@dimen/_18sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <Button-->
+<!--        android:id="@+id/rideBtn"-->
+<!--        android:layout_width="@dimen/_135sdp"-->
+<!--        android:layout_height="@dimen/_45sdp"-->
+<!--        android:letterSpacing="0"-->
+<!--        android:text="Pool"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:textSize="@dimen/_16ssp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:cornerRadius="@dimen/_18sdp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <Button
         android:id="@+id/driveBtn"
@@ -28,13 +28,13 @@
         android:letterSpacing="0"
         android:text="Drive"
         android:textAllCaps="false"
-        android:layout_marginTop="@dimen/_10sdp"
         android:textSize="@dimen/_16ssp"
         android:textStyle="bold"
         app:cornerRadius="@dimen/_18sdp"
+        android:layout_marginBottom="@dimen/_100sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rideBtn" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/nightMode"
@@ -57,5 +57,18 @@
         android:textSize="@dimen/_15ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/rideBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:contentDescription="f"
+        android:src="@drawable/carpool"
+        app:maxImageSize="@dimen/_30sdp"
+        app:tint="@color/peachs"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

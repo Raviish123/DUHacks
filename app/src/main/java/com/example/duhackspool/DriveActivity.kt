@@ -160,6 +160,7 @@ class DriveActivity : AppCompatActivity() {
                 var intent = Intent(this@DriveActivity, PaymentActivity::class.java)
                 intent.putExtra("paymentAmount", paymentAmount)
                 intent.putExtra("isDriver", true)
+                mapboxNavigation.stopTripSession()
                 startActivity(intent)
                 finish()
 
@@ -667,6 +668,10 @@ class DriveActivity : AppCompatActivity() {
         httpAsync.join()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mapboxNavigation.stopTripSession()
+    }
 
     override fun onStart() {
         super.onStart()

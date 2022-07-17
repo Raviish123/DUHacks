@@ -38,8 +38,6 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
-        if (savedInstanceState != null) return
-
         binding.loginBtn.setOnClickListener {
             if (binding.nameField.text.toString() != "" && binding.editTextPassword.text.toString() != "") {
                 LoginManager.name = binding.nameField.text.toString()

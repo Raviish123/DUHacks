@@ -315,8 +315,13 @@ class RideActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        "http://192.168.0.122:8000/deleteRequest/${requestIndex}"
+        val httpAsync = "http://192.168.0.122:8000/deleteRequest/${requestIndex}"
             .httpGet()
+            .responseString {_,_,_ ->
+
+            }
+
+        httpAsync.join()
     }
 
 
